@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="hamcrest-core-1.3-javadoc">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/hamcrest-core-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/junit-4.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/scalatest_2.11-2.2.4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/libs/hamcrest-core-1.3-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/junit-4.12-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
