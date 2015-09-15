@@ -1,4 +1,4 @@
-package PayrolleMate.Periods
+package PayrolleeMate.Periods
 
 /**
  * Created by lisy on 14.9.15.
@@ -34,9 +34,9 @@ case class SpanOfYears(yearFrom:Int, yearUpto:Int) {
   }
   def className: String = {
     if (yearFrom == yearUpto) {
-      return "${yearFrom}"
+      return s"$yearFrom"
     }
-    "${yearFrom}to${yearUpto}"
+    s"$yearFrom" + "to" + s"$yearUpto"
   }
 
   override def toString:String = {

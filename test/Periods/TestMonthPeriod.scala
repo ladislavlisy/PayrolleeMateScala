@@ -1,4 +1,4 @@
-package PayrolleMate.Periods
+package PayrolleeMate.Periods
 
 /**
  * Created by lisy on 14.9.15.

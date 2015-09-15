@@ -1,4 +1,4 @@
-package PayrolleMate.Periods
+package PayrolleeMate.Periods
 
 /**
  * Created by lisy on 14.9.15.
@@ -33,9 +33,9 @@ case class SpanOfMonths(periodFrom:MonthPeriod, periodUpto:MonthPeriod) {
   }
   def className: String = {
     if (periodFrom == periodUpto) {
-      return "${periodFrom}"
+      return s"$periodFrom"
     }
-    "${periodFrom}to${periodUpto}"
+    s"$periodFrom" + "to" + s"$periodUpto"
   }
 
   override def toString:String = {

@@ -1,4 +1,4 @@
-package PayrolleMate.Periods
+package PayrolleeMate.Periods
 
 import java.time.format.DateTimeFormatter
 import java.time.{DayOfWeek, YearMonth, LocalDate}
@@ -8,6 +8,10 @@ import java.util.Locale
  * Created by lisy on 14.9.15.
  */
 case class MonthPeriod(code:Int) {
+  def this(year: Int, month: Int) {
+    this(year*100 + month)
+  }
+
   def year:Int = {
     code / 100
   }
@@ -89,14 +93,16 @@ case class MonthPeriod(code:Int) {
   }
 
   override def toString:String = {
-    Integer.toString(this.code)
+    s"$this.code"
   }
 }
 
 object MonthPeriod {
-  val PRESENT:Int = 0
-  val TERM_BEG_FINISHED:Int = 32
-  val TERM_END_FINISHED:Int = 0
+  val PRESENT: Int = 0
+  val TERM_BEG_FINISHED: Int = 32
+  val TERM_END_FINISHED: Int = 0
+  val WEEKSUN_SUNDAY: Int = 0
+  val WEEKMON_SUNDAY: Int = 7
 
   def beginYear(year:Int): MonthPeriod = {
     MonthPeriod(year*100 + 1)
@@ -106,7 +112,9 @@ object MonthPeriod {
     MonthPeriod(year*100 + 12)
   }
 
-  def dayOfWeekMonToSun(periodDateCwd: DayOfWeek):Int = {
+  def dayOfWeekMonToSun(periodDateCwd: DayOfWeek): Int = {
+    // DayOfWeek Sunday = 7,
+    // Monday = 1, Tuesday = 2, Wednesday = 3, Thursday = 4, Friday = 5, Saturday = 6,
     periodDateCwd.getValue
   }
 }
