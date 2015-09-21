@@ -3,55 +3,18 @@ package PayrolleeMate.Periods
 /**
  * Created by ladislavlisy on 15/09/15.
  */
-case class SeqOfYears(milestones: List[Int]) {
+case class SeqOfYears(milestones: Array[SpanOfYears]) {
   def this(years: Array[Int]) {
-    this(years.sortBy(SeqOfYears.sortYear).toList)
+    this(SeqOfYears.initFromArray(years))
   }
 
   def yearsIntervalForPeriod(period: MonthPeriod): SpanOfYears = {
-    def forPeriodAccumulator(agr: SpanOfYears, x: Int): SpanOfYears = {
-      val intYear = if (x == 0) SeqOfYears.END_YEAR_ARRAY else x
-      val intFrom = if (period.year >= intYear) intYear else agr.yearFrom
-      val intUpto = if (period.year < intYear && agr.yearUpto == 0) (intYear - 1) else agr.yearUpto
-
-      SpanOfYears(intFrom, intUpto)
-    }
-    val initsSpan: SpanOfYears = SpanOfYears.CreateFromYear(0)
-    val validSpan: SpanOfYears = milestones.foldLeft(initsSpan) (forPeriodAccumulator)
-    validSpan
+    val spanForPeriod = milestones.filter((span) => SeqOfYears.selectForPeriod(span, period))
+    spanForPeriod.last
   }
 
-  def toYearsIntervalList: List[SpanOfYears] = {
-    def toListAccumulator(agr: List[SpanOfYears], x: Int): List[SpanOfYears] = {
-      val firstPart = agr.takeWhile((y) => y.yearUpto != 0)
-
-      if (agr.isEmpty) {
-        firstPart ::: List(SpanOfYears(x, 0))
-      } else {
-        val lastPart = agr.takeRight(1).head
-
-        if (x == 0) {
-          val historyFrom = lastPart.yearFrom
-          val historyUpto = SeqOfYears.END_YEAR_INTER
-
-          firstPart ::: List(SpanOfYears(historyFrom, historyUpto))
-        } else {
-          val historyFrom = lastPart.yearFrom
-          val historyUpto = Math.max(x - 1, historyFrom)
-
-          firstPart ::: List(SpanOfYears(historyFrom, historyUpto), SpanOfYears(x, 0))
-        }
-      }
-    }
-    val history: List[SpanOfYears] = milestones.foldLeft(List[SpanOfYears]()) (toListAccumulator)
-    val lastHistoryPart: SpanOfYears = history.takeRight(1).head
-    if (lastHistoryPart.yearUpto == 0) {
-      val firstHistoryPart: List[SpanOfYears] = history.takeWhile((y) => y.yearUpto != 0)
-      val historyFrom: Int = lastHistoryPart.yearFrom
-      val historyUpto: Int = lastHistoryPart.yearFrom
-      return firstHistoryPart ::: List(SpanOfYears(historyFrom, historyUpto))
-    }
-    history
+  def yearsIntervalList: Array[SpanOfYears] = {
+    milestones.clone()
   }
 }
 
@@ -59,7 +22,22 @@ object SeqOfYears {
   val END_YEAR_ARRAY: Int = 2100
   val END_YEAR_INTER: Int = 2099
 
-  def sortYear(year: Int): Int = {
+  def transformZeroToUpto(year: Int) : Int = {
     if (year == 0) SeqOfYears.END_YEAR_ARRAY else year
+  }
+  def transformYearsToSpan(yearFrom: Int, yearUpto: Int) : SpanOfYears = {
+    val tranUpto = SeqOfYears.transformZeroToUpto(yearUpto)
+    val spanUpto = if (tranUpto == yearFrom) tranUpto else (tranUpto - 1)
+    SpanOfYears(yearFrom, spanUpto)
+  }
+  def selectForPeriod(span: SpanOfYears, period: MonthPeriod): Boolean = {
+    period.year >= span.yearFrom && period.year <= span.yearUpto
+  }
+  def initFromArray(years: Array[Int]): Array[SpanOfYears] = {
+    val sortedYears = years.sortBy(SeqOfYears.transformZeroToUpto)
+    val beginsYears = sortedYears.filter((year) => year != 0)
+    val finishYears = sortedYears.slice(1, sortedYears.length)
+    val sortedZiped = beginsYears.zip(finishYears)
+    sortedZiped.map((x) => SeqOfYears.transformYearsToSpan(x._1, x._2))
   }
 }
