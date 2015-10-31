@@ -58,7 +58,6 @@ case class MonthPeriod(code:Int) {
     return MonthPeriod.dayOfWeekMonToSun(periodDateCwd)
   }
 
-
   def description:String = {
     val firstPeriodDay: LocalDate = beginOfMonth
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH)

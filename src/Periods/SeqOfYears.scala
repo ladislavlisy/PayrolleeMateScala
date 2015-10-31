@@ -35,8 +35,10 @@ object SeqOfYears {
   }
   def initFromArray(years: Array[Int]): Array[SpanOfYears] = {
     val sortedYears = years.sortBy(SeqOfYears.transformZeroToUpto)
-    val beginsYears = sortedYears.filter((year) => year != 0)
-    val finishYears = sortedYears.slice(1, sortedYears.length)
+    val beginsBound = Math.max(0, sortedYears.length - 1)
+    val beginsYears = sortedYears.slice(0, beginsBound)
+    val finishBound = Math.max(0, sortedYears.length)
+    val finishYears = sortedYears.slice(1, finishBound)
     val sortedZiped = beginsYears.zip(finishYears)
     sortedZiped.map((x) => SeqOfYears.transformYearsToSpan(x._1, x._2))
   }
